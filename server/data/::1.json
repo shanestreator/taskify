@@ -1,0 +1,9 @@
+{
+	"todos": [
+		{ "id": 1, "task": "test1" },
+		{ "id": 2, "task": "test2" },
+		{ "id": 3, "task": "test3" }
+	],
+	"posts": [],
+	"users": []
+}
