@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently 'cd ./client && yarn dev' 'cd ./server && yarn dev'"
+    "dev": "concurrently 'cd ./client && yarn dev' 'cd ./server && yarn dev'",
+    "run:install": "concurrently 'cd ./client && yarn install' 'cd ./server && yarn install'"
   },
   "dependencies": {
     "concurrently": "^7.3.0"

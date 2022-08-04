@@ -1,68 +1,62 @@
-import express from 'express'
+import express, { Response } from 'express'
 import fs from 'fs'
+
+const validateFile = (ip: string) => fs.existsSync(`data/${ip}.json`)
+const getData = (ip: string) => JSON.parse(fs.readFileSync(`data/${ip}.json`, 'utf-8'))
 
 const router = express.Router()
 
+
 router.get('/', (req, res) => {
-	try {
-		const ip: string | any = req.socket.remoteAddress
-		const data = JSON.parse(fs.readFileSync(`data/${ip}.json`, 'utf-8'))
-		const todos = data.todos
+	const fileExists = validateFile(req.ip)
+	if (!fileExists) return res.status(400).send({success: false})
 
-		if (!todos || !todos.length) return res.status(400).send('tasks do not exist')
-		
-		res.send(todos)
-
-	} catch (error: any) {
-		console.error(error.message)
-    	res.status(500).send('Server Error')
-	}
+	const data = getData(req.ip)
+	
+	res.send(data)
 })
+
 
 router.get('/:id', (req, res) => {
-	try {
-		const ip: string | any = req.socket.remoteAddress
-		const data = JSON.parse(fs.readFileSync(`data/${ip}.json`, 'utf-8'))
-		const id: string = req.params?.id
-		const todo = data.todos.filter((t: any) => t.id == id)
+	const fileExists = validateFile(req.ip)
+	if (!fileExists) return res.status(400).send({success: false})
 
-		if (!todo || !todo.length) return res.status(400).send('task does not exist')
-		
-		res.send(todo)
+	const data = getData(req.ip)
+	const id: string = req.params.id
+	const todo = data.todos.filter((t: any) => t.id == id)
 
-	} catch (error: any) {
-		console.error(error.message)
-    	res.status(500).send('Server Error')
-	}
+	if (!todo || !todo.length) return res.status(400).send('task does not exist')
+	
+	res.send(todo)
 })
 
-router.post('/:id', (req, res) => {
-	try {
-		const ip: string | any = req.socket.remoteAddress
-		const data = JSON.parse(fs.readFileSync(`data/${ip}.json`, 'utf-8'))
 
-		// check if ip address exists
-		// const ipExists = validateIp(ip)
-		// if (!ipExists) {
-		// 	// create new ${ip}.json file in data folder
-		// }
+router.post('/', (req, res) => {
+	fs.writeFileSync(`data/${req.ip}.json`, JSON.stringify(req.body), { encoding:'utf8' })
 
-		const todos = data.todos
-
-		const map1 = new Map();
-
-		map1.set('a', 1);
-		map1.set('b', 2);
-		map1.set('c', 3);
-
-		res.send(todos)
-
-	} catch (error: any) {
-		console.error(error.message)
-    	res.status(500).send('Server Error')
-	}
+	res.send({success: true})
 })
 
-router.put('/:id', (req, res) => {})
+
+router.put('/:id', (req, res) => {
+	const fileExists = validateFile(req.ip)
+	if (!fileExists) return res.status(400).send({success: false})
+
+	
+})
+
+
+router.delete('/:id', (req, res) => {
+	const fileExists = validateFile(req.ip)
+	if (!fileExists) return res.status(400).send({success: false})
+
+	const data = getData(req.ip)
+	const id: string = req.params.id
+	const todos = data.filter((t: any) => t.id != id)
+
+	fs.writeFileSync(`data/${req.ip}.json`, JSON.stringify(todos), { encoding:'utf8' })
+
+	res.send({success: true})
+})
 
 export default router
