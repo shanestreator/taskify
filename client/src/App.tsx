@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css'
 import InputField from './components/InputField'
 import TodoList from './components/TodoList'
+import AddList from './components/AddList/AddList'
 import { Todo } from './model'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import request from './utils/request'
+import { useQuery } from '@tanstack/react-query'
+
+const TODO_URL = 'https://phemjson.com/todos'
 
 const App: React.FC = () => {
   const [todo, setTodo] = useState<string>('')
@@ -50,14 +55,35 @@ const App: React.FC = () => {
     setCompletedTodos(complete)
   }
 
+  const getTodos = async () => await request.get(TODO_URL)
+
+  const { data, isLoading, isError, error } = useQuery([], getTodos)
+  
+  console.log('isError: ', isError)
+  console.log('isLoading: ', isLoading)
+  console.log('data: ', data)
+
+  if (isError) return <p>{`Error: ${error}`}</p>
+  if (isLoading) return <p>Loading...</p>
+
+  // const dummyTodo = { title: 'hello', status: 'IN_PROGRESS', order: 100 }
+  // const dater = _todos.get(todoUrl)
+  // console.log(dater)
+  // _todos.add(dummyTodo)
+  // _todos.update(id, todoData)
+  // _todos.delete("6e0abb3c-8997-4116-a586-4fe7c7e0b9f1")
+
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="App">
-        <span className="heading">Taskify</span>
-        <InputField todo={todo} setTodo={setTodo} onSubmit={onSubmit} />
-        <TodoList todos={todos} setTodos={setTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} />
-      </div>
-    </DragDropContext>
+    <div className="App">
+      <AddList />
+    </div>
+    // <DragDropContext onDragEnd={onDragEnd}>
+    //   <div className="App">
+    //     <span className="heading">Taskify</span>
+    //     <InputField todo={todo} setTodo={setTodo} onSubmit={onSubmit} />
+    //     <TodoList todos={todos} setTodos={setTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} />
+    //   </div>
+    // </DragDropContext>
   )
 }
 
