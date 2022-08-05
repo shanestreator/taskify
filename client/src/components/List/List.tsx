@@ -14,6 +14,7 @@ const List = ({id, name, listIndex, tasks}: L) => {
             {tasks.map(t => (
               <Task key={t.id} {...t} />
             ))}
+            <AddList />
           </>
         ) : (
           <AddList />

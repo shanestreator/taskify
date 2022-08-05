@@ -1,7 +1,8 @@
-import React, { FormEvent } from 'react'
+import React, { FormEvent, useState } from 'react'
 import { BsPlusLg } from 'react-icons/bs'
 
 const AddList = () => {
+  const [toggleInput, setToggleInput] = useState(false)
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
