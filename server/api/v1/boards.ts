@@ -9,7 +9,7 @@ const router = express.Router()
 // @access   Public
 router.get('/', (req, res) => {
   const node = res.locals.node
-  if (!node) return res.status(400).send({ success: false, error: 'please create a board' })
+  if (!node) return res.status(200).send({ success: false, error: 'please create a board' })
 
   res.status(200).send({
     success: true,
@@ -35,7 +35,9 @@ router.get('/:boardId', (req, res) => {
 // @access   Public
 router.post('/', (req, res) => {
   const { name } = req.body
+  console.log({name})
   if (!name) return res.status(400).send({ success: false, error: 'board name required' })
+
 
   const newBoard = {
     id: randomUUID(),
@@ -48,13 +50,13 @@ router.post('/', (req, res) => {
   let node = res.locals.node
 
   if (!node) {
-    cache.set(req.ip, {
+    node = cache.set(req.ip, {
       boards: [
         newBoard
       ]
     })
   } else {
-    cache.set(req.ip, {
+    node = cache.set(req.ip, {
       ...node,
       boards: [
         ...node.boards,
@@ -63,11 +65,11 @@ router.post('/', (req, res) => {
     })
   }
 
-  node = cache.get(req.ip)
+  console.log({node})
 
   res.status(200).send({
     success: true,
-    boards: node.boards 
+    board: newBoard
   })
 })
 

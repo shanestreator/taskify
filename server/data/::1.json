@@ -1,7 +1,0 @@
-{
-	"todos": [
-		{ "id": 1, "index": 1, "task": "test1", "col": "active", "createdAt": "timestamp", "updatedAt": "timestamp" },
-		{ "id": 2, "index": 2, "task": "test2", "col": "active", "createdAt": "timestamp", "updatedAt": "timestamp" },
-		{ "id": 3, "index": 1, "task": "test3", "col": "complete", "createdAt": "timestamp", "updatedAt": "timestamp" }
-	]
-}

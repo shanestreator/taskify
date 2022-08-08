@@ -27,6 +27,6 @@ app.use('/api/boards/lists', lists)
 // 	res.send('Typescript and node works')
 // })
 
-app.listen(4321, () => {
-	console.log('Running on port 4321')
+app.listen(5000, () => {
+	console.log('Running on port 5000')
 })
