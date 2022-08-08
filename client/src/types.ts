@@ -1,3 +1,7 @@
+export type Board = {
+  name: string
+}
+
 export type Todo = {
   title: string,
   status: string,
@@ -16,8 +20,4 @@ export interface List {
   name: string
   listIndex: number
   tasks: Task[]
-}
-
-export interface Board {
-  lists: List[]
 }

@@ -12,10 +12,21 @@ h1, h2, h3, h4 {
   padding: 25px;
 }
 
+.loading {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .board {
   height: 100%;
 }
 
+.board__header {
+  margin-bottom: 2rem;
+}
 
 .column {
   height: 100%;
@@ -66,6 +77,65 @@ h1, h2, h3, h4 {
       min-height: 20px;
       background: rgba(255, 255, 255, .25);
       border-radius: 0 0 5px 5px;
+    }
+  }
+}
+
+$bg-black: #333333;
+$bg-black-hover: rgba(51, 51, 51, .5);
+
+.react-select-container {
+  .react-select__control {
+    background-color: $bg-black;
+    border-color: $bg-black;
+    transition: none;
+    box-shadow: none;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $bg-black-hover;
+    }
+    &.active {
+      border-radius: 4px 4px 0 0;
+    }
+  }
+
+  .react-select__menu {
+    background-color: $bg-black;
+    border: 1px solid $bg-black;
+    border-radius: 0 0 4px 4px;
+    margin-top: 0;
+  }
+
+  .react-select__option {
+    background-color: $bg-black;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $bg-black-hover;
+    }
+  }
+
+  .react-select__indicator-separator {
+    background-color: $bg-black;
+  }
+
+  .react-select__placeholder,
+  .react-select__single-value {
+    color: white;
+  }
+}
+
+.ReactModal__Overlay {
+  background-color: $bg-black-hover !important;
+
+  .ReactModal__Content {
+    background-color: $bg-black !important;
+    border: none !important;
+    border-radius: 5px !important;
+
+    .form_new_board {
+      
     }
   }
 }

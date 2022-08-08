@@ -6,6 +6,10 @@ import request from './lib/request'
 import { useQuery } from '@tanstack/react-query'
 import Board from './components/Board/Board'
 import './styles.scss'
+import Loader from './components/Loader'
+import BoardHeader from './components/BoardHeader/BoardHeader'
+import ReactModal from 'react-modal'
+import FormAddBoard from './components/FormAddBoard/FormAddBoard'
 
 const boards = [
   {
@@ -63,15 +67,37 @@ const App: React.FC = () => {
   }
 
   const getBoards = async () => await request.get('/api/boards')
-
-  const { data, isLoading, isError, error } = useQuery([], getBoards)
   
-  console.log({data, isLoading, isError, error})
+
+  const { data, isLoading, isError, error, refetch } = useQuery([], getBoards)
+  
+  if (isLoading) return <Loader />
+  // console.log({data, isLoading, isError, error})
+
+  
 
   return (
     <div className="App">
-      <h3>Board: {boards[0].name}</h3>
-      <Board lists={boards[0].lists} />
+      {
+        !data.success ?
+          <ReactModal
+            isOpen={!data.success}
+            contentLabel="onRequestClose Example"
+            onRequestClose={null}
+            shouldCloseOnOverlayClick={true}
+            ariaHideApp={false}
+          >
+            <h3>Create a board to get started!</h3>
+            <FormAddBoard refetch={refetch} />
+          </ReactModal>
+        : (
+          <>
+            <BoardHeader />
+            {/* <Board lists={boards[0].lists} /> */}
+          </>
+        )
+      }
+      
     </div>
     // <DragDropContext onDragEnd={onDragEnd}>
     //   <div className="App">
