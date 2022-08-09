@@ -8,67 +8,64 @@ import Board from './components/Board/Board'
 import './styles.scss'
 import Loader from './components/Loader'
 import BoardHeader from './components/BoardHeader/BoardHeader'
-import ReactModal from 'react-modal'
 import FormAddBoard from './components/FormAddBoard/FormAddBoard'
 
 const boards = [
   {
-    id: 'board id',
-    name: 'board name',
-    lists: [
-      {
-        id: 'list id',
-        name: 'list name',
-        listIndex: 0,
-        tasks: [
-          {
-            id: 'task id',
-            name: 'task name',
-            belongsToList: 'list id',
-            taskIndex: 0
-          }
-        ]
-      }
-    ]
+	id: 'board id',
+	name: 'board name',
+	lists: [
+	  {
+		id: 'list id',
+		name: 'list name',
+		listIndex: 0,
+		tasks: [
+		  {
+			id: 'task id',
+			name: 'task name',
+			belongsToList: 'list id',
+			taskIndex: 0
+		  }
+		]
+	  }
+	]
   }
 ]
 
 const App: React.FC = () => {
 
   const onDragEnd = (result: DropResult) => {
-    // const { source, destination } = result
-    
-    // if (!destination) return
-    // if (
-    //   destination.droppableId === source.droppableId &&
-    //   destination.index === source.index
-    // ) return
-    
-    // let moveTask
-    // let active = todos
-    // let complete = completedTodos
+	// const { source, destination } = result
+	
+	// if (!destination) return
+	// if (
+	//   destination.droppableId === source.droppableId &&
+	//   destination.index === source.index
+	// ) return
+	
+	// let moveTask
+	// let active = todos
+	// let complete = completedTodos
 
-    // if (source.droppableId === 'ActiveList') {
-    //   moveTask = active[source.index]
-    //   active.splice(source.index, 1)
-    // } else {
-    //   moveTask = complete[source.index]
-    //   complete.splice(source.index, 1)
-    // }
+	// if (source.droppableId === 'ActiveList') {
+	//   moveTask = active[source.index]
+	//   active.splice(source.index, 1)
+	// } else {
+	//   moveTask = complete[source.index]
+	//   complete.splice(source.index, 1)
+	// }
 
-    // if (destination.droppableId === 'ActiveList') {
-    //   active.splice(destination.index, 0, moveTask)
-    // } else {
-    //   complete.splice(destination.index, 0, moveTask)
-    // }
+	// if (destination.droppableId === 'ActiveList') {
+	//   active.splice(destination.index, 0, moveTask)
+	// } else {
+	//   complete.splice(destination.index, 0, moveTask)
+	// }
 
-    // setTodos(active)
-    // setCompletedTodos(complete)
+	// setTodos(active)
+	// setCompletedTodos(complete)
   }
 
   const getBoards = async () => await request.get('/api/boards')
-  
-
   const { data, isLoading, isError, error, refetch } = useQuery([], getBoards)
   
   if (isLoading) return <Loader />
@@ -77,35 +74,26 @@ const App: React.FC = () => {
   
 
   return (
-    <div className="App">
-      {
-        !data.success ?
-          <ReactModal
-            isOpen={!data.success}
-            contentLabel="onRequestClose Example"
-            onRequestClose={null}
-            shouldCloseOnOverlayClick={true}
-            ariaHideApp={false}
-          >
-            <h3>Create a board to get started!</h3>
-            <FormAddBoard refetch={refetch} />
-          </ReactModal>
-        : (
-          <>
-            <BoardHeader />
-            {/* <Board lists={boards[0].lists} /> */}
-          </>
-        )
-      }
-      
-    </div>
-    // <DragDropContext onDragEnd={onDragEnd}>
-    //   <div className="App">
-    //     <span className="heading">Taskify</span>
-    //     <InputField todo={todo} setTodo={setTodo} onSubmit={onSubmit} />
-    //     <TodoList todos={todos} setTodos={setTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} />
-    //   </div>
-    // </DragDropContext>
+	<div className="App">
+	  {
+		!data.success ?
+		  <FormAddBoard isOpen={!data.success} refetch={refetch} />
+		: (
+		  <>
+			<BoardHeader />
+			{/* <Board lists={boards[0].lists} /> */}
+		  </>
+		)
+	  }
+	  
+	</div>
+	// <DragDropContext onDragEnd={onDragEnd}>
+	//   <div className="App">
+	//     <span className="heading">Taskify</span>
+	//     <InputField todo={todo} setTodo={setTodo} onSubmit={onSubmit} />
+	//     <TodoList todos={todos} setTodos={setTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} />
+	//   </div>
+	// </DragDropContext>
   )
 }
 

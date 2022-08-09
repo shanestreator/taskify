@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
+import ReactModal from 'react-modal'
 import request from '../../lib/request'
 import Loader from '../Loader'
 
-const FormAddBoard = ({ refetch }: any) => {
+const FormAddBoard = ({ isOpen, refetch }: any) => {
 	const [boardName, setBoardName] = useState('')
 
 	const addBoard = async (data: any) => await request.post('/api/boards', { name: boardName })
@@ -24,7 +25,14 @@ const FormAddBoard = ({ refetch }: any) => {
 	if (isLoading) return <Loader height="300px" />
 
 	return (
-		<>
+		<ReactModal
+			isOpen={!data.success}
+			contentLabel="onRequestClose Example"
+			onRequestClose={null}
+			shouldCloseOnOverlayClick={true}
+			ariaHideApp={false}
+		>
+			<h3>Create a board to get started!</h3>
 			{
 				data?.success ? (
 					<div className="success">
@@ -42,7 +50,7 @@ const FormAddBoard = ({ refetch }: any) => {
 					</form>
 				)
 			}
-		</>
+		</ReactModal>
 	)
 }
 
