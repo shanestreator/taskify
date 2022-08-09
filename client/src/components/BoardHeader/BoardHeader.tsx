@@ -1,30 +1,60 @@
-import { useState } from 'react'
-import Select from 'react-select';
+import { useState, useEffect } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import Select from 'react-select'
+import request from '../../lib/request'
+import { useCreateBoard, useDeleteBoard } from '../../hooks/useBoards'
 
-const BoardHeader = ({ boards }: any) => {
-	const [selectedOption, setSelectedOption] = useState(null);
+const noBoards = { value: 'none', label: 'No boards' }
 
-	let boardOptions = boards ? boards.map((b: any) => ({ value: b.name, label: b.name })) : [{ value: 'new', label: 'Create board' }]
+const BoardHeader = ({ boards, refetchBoards }: any) => {
+	const [selectedOption, setSelectedOption] = useState(noBoards)
+	const [options, setOptions] = useState([noBoards])
 
-	const customStyles = {
-		control: (provided: any, state: any) => ({
-			...provided,
-			borderRadius: state.menuIsOpen ? '4px 4px 0 0' : '4px'
-		})
+	useEffect(() => {
+		setOptions(
+			boards
+				? boards.map((b: any) => {
+						const optionValue = { value: b.id, label: b.name }
+						if (b.selected) setSelectedOption(optionValue)
+						return optionValue
+				  })
+				: [noBoards]
+		)
+	}, [boards])
+
+	const onCreate = () => {}
+
+	const deleteBoard = (id: string) => useDeleteBoard(id)
+
+	const onDelete = () => {
+		const { value: id, label: name } = selectedOption
+		const confirmed = confirm(`Are you sure you want to delete ${name}?`)
+		if (confirmed) deleteBoard(id)
 	}
-	
+
 	return (
-		<div className='board__header'>
+		<div className="board__header">
 			<Select
-				className='react-select-container'
-				classNamePrefix='react-select'
+				className="react-select-container"
+				classNamePrefix="react-select"
 				value={selectedOption}
-				onChange={setSelectedOption}
-				options={boardOptions}
+				onChange={(e: any) => setSelectedOption(e)}
+				options={options}
 				styles={customStyles}
 			/>
+			<div className="board__header_control">
+				<button onClick={onDelete}>Delete</button>
+				<button onClick={onCreate}>Create New Board</button>
+			</div>
 		</div>
 	)
+}
+
+const customStyles = {
+	control: (provided: any, state: any) => ({
+		...provided,
+		borderRadius: state.menuIsOpen ? '4px 4px 0 0' : '4px'
+	})
 }
 
 export default BoardHeader

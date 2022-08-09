@@ -10,7 +10,7 @@ const app: Express = express()
 app.use(express.json())
 app.use(morgan('combined'))
 
-export const cache = tempCache({ timeoutMs: 1000 * 60 })
+export const cache = tempCache({ timeoutMs: 1000 * 60 * 10 })
 
 app.use((req, res, next) => {
 	const node = cache.get(req.ip)

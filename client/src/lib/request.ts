@@ -27,7 +27,12 @@ const request = {
     return await result.json()
   },
   async delete(url: string) {
-    const result = await fetch(url)
+    const result = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
     return await result.json()
   }
 }
