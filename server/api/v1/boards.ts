@@ -106,9 +106,11 @@ router.put('/', (req, res) => {
 // @access   Public
 router.delete('/:boardId', (req, res) => {
 	let node = res.locals.node
+	console.log({ nodehello: node })
 	if (!node) return res.status(400).send({ success: false, error: 'please create a board' })
 
 	const { boardId } = req.params
+	console.log({ boardId })
 	const board = node.boards.filter((b: any) => b.id === boardId)
 	if (!board.length) return res.status(400).send({ success: false, error: 'invalid board id' })
 

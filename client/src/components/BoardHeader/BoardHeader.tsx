@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import Select from 'react-select'
 import request from '../../lib/request'
-import { useCreateBoard, useDeleteBoard } from '../../hooks/useBoards'
+import { useCreateBoard, useDeleteBoard, useGetAllBoards } from '../../hooks/useBoards'
 
 const noBoards = { value: 'none', label: 'No boards' }
 
@@ -11,6 +11,7 @@ const BoardHeader = ({ boards, refetchBoards }: any) => {
 	const [options, setOptions] = useState([noBoards])
 
 	useEffect(() => {
+		console.log({ boards })
 		setOptions(
 			boards
 				? boards.map((b: any) => {
@@ -24,12 +25,17 @@ const BoardHeader = ({ boards, refetchBoards }: any) => {
 
 	const onCreate = () => {}
 
-	const deleteBoard = (id: string) => useDeleteBoard(id)
+	const { mutate: deleteBoard } = useDeleteBoard(selectedOption.value)
 
 	const onDelete = () => {
 		const { value: id, label: name } = selectedOption
 		const confirmed = confirm(`Are you sure you want to delete ${name}?`)
-		if (confirmed) deleteBoard(id)
+		if (confirmed) {
+			deleteBoard(id)
+			setTimeout(() => {
+				refetchBoards()
+			}, 300)
+		}
 	}
 
 	return (
