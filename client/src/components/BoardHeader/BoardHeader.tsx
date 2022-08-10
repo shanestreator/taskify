@@ -3,10 +3,12 @@ import { useMutation } from '@tanstack/react-query'
 import Select from 'react-select'
 import request from '../../lib/request'
 import { useCreateBoard, useDeleteBoard, useGetAllBoards } from '../../hooks/useBoards'
+import ModalFormAddBoard from '../ModalFormAddBoard/ModalFormAddBoard'
 
-const noBoards = { value: 'none', label: 'No boards' }
+const noBoards = { value: 'none', label: 'Create a board!' }
 
 const BoardHeader = ({ boards, refetchBoards }: any) => {
+	const [toggleCreateBoard, setToggleCreateBoard] = useState(false)
 	const [selectedOption, setSelectedOption] = useState(noBoards)
 	const [options, setOptions] = useState([noBoards])
 
@@ -23,6 +25,8 @@ const BoardHeader = ({ boards, refetchBoards }: any) => {
 		)
 	}, [boards])
 
+	// const { mutate: createBoard } = useCreateBoard(data)
+
 	const onCreate = () => {}
 
 	const { mutate: deleteBoard } = useDeleteBoard(selectedOption.value)
@@ -30,22 +34,25 @@ const BoardHeader = ({ boards, refetchBoards }: any) => {
 	const onDelete = () => {
 		const { value: id, label: name } = selectedOption
 		const confirmed = confirm(`Are you sure you want to delete ${name}?`)
-		if (confirmed) {
-			deleteBoard(id)
-			setTimeout(() => {
-				refetchBoards()
-			}, 300)
-		}
+		if (!confirmed) return
+
+		deleteBoard(id)
+
+		setTimeout(() => {
+			refetchBoards()
+		}, 300)
 	}
 
 	return (
 		<div className="board__header">
+			<ModalFormAddBoard />
 			<Select
 				className="react-select-container"
 				classNamePrefix="react-select"
 				value={selectedOption}
 				onChange={(e: any) => setSelectedOption(e)}
 				options={options}
+				isDisabled={true}
 				styles={customStyles}
 			/>
 			<div className="board__header_control">
@@ -59,7 +66,8 @@ const BoardHeader = ({ boards, refetchBoards }: any) => {
 const customStyles = {
 	control: (provided: any, state: any) => ({
 		...provided,
-		borderRadius: state.menuIsOpen ? '4px 4px 0 0' : '4px'
+		borderRadius: state.menuIsOpen ? '4px 4px 0 0' : '4px',
+		opacity: state.isDisabled ? 0.25 : 1
 	})
 }
 
