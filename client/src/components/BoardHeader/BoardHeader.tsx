@@ -17,9 +17,9 @@ const BoardHeader = ({ boards, refetchBoards }: any) => {
 		setOptions(
 			boards
 				? boards.map((b: any) => {
-						const optionValue = { value: b.id, label: b.name }
-						if (b.selected) setSelectedOption(optionValue)
-						return optionValue
+					const optionValue = { value: b.id, label: b.name }
+					if (b.selected) setSelectedOption(optionValue)
+					return optionValue
 				  })
 				: [noBoards]
 		)
@@ -45,7 +45,7 @@ const BoardHeader = ({ boards, refetchBoards }: any) => {
 
 	return (
 		<div className="board__header">
-			<ModalFormAddBoard />
+			{toggleCreateBoard && <ModalFormAddBoard />}
 			<Select
 				className="react-select-container"
 				classNamePrefix="react-select"
@@ -57,7 +57,7 @@ const BoardHeader = ({ boards, refetchBoards }: any) => {
 			/>
 			<div className="board__header_control">
 				<button onClick={onDelete}>Delete</button>
-				<button onClick={onCreate}>Create New Board</button>
+				<button onClick={() => setToggleCreateBoard(!toggleCreateBoard)}>Create New Board</button>
 			</div>
 		</div>
 	)
